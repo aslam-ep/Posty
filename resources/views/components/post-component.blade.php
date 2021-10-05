@@ -8,6 +8,15 @@
     <a href="{{ route('users.posts', $post->user) }}" class="font-bold">{{ $post->user->name }}</a>
     {{-- Date is a carbon object so we can use its methods on it --}}
     <span class="text-gray-600 text-sm">{{ $post->created_at->diffForHumans() }}</span>
+
+    <div class="w-1/4 mt-2 mb-2 bg-white shadow-md rounded-md overflow-hidden">
+        @if ($post->post_img)
+            <img src="{{ asset('images/posts/'.$post->post_img) }}" alt="" class="object-fill w-full h-40"/>
+        @else
+            <img src="{{ asset('images/posts/post.jpg') }}" alt="" class="object-fill w-full h-48"/>
+        @endif
+    </div>
+
     <p class="mb-2">{{ $post->body }}</p>
 
     {{-- Deleting post created by the logined user --}}

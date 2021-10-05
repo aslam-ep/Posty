@@ -46,9 +46,34 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        /**
+         * Methods on image
+         * guessExtention
+         * getMimeType
+         * store
+         * asStore
+         * storePublicly
+         * move
+         * getClientOriginalName
+         * getClientMimeType
+         * guessClientExtention
+         * getSize
+         * getError
+         * isValid
+         * $test = $request->file('image')->isValid();
+         */
+
         $this->validate($request, [
             'body' => 'required',
-        ]); 
+            'image' =>'required|mimes:jpg,png,jpeg|max:5048',
+        ]);
+        
+        $newPostImageName = time() 
+                            .'-' 
+                            .'post.'
+                            .$request->image->extension();
+
+        $request->image->move(public_path('images/posts'), $newPostImageName);
 
         /**
          * posts() - return us the relationship object 
@@ -57,7 +82,10 @@ class PostController extends Controller
          * create() need an array as argument
          * $request->only() returns an array
          */
-        $request->user()->posts()->create($request->only('body'));
+        $request->user()->posts()->create([
+            'body' => $request->body,
+            'post_img' => $newPostImageName,
+        ]);
 
         return back();
     }
